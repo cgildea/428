@@ -4,7 +4,7 @@ public class GrayCodeCECS428 {
 
     public static void main(String[] args) {
        // int N = Integer.parseInt(args[0]);
-        int N = 22;
+        int N = 3;
         gray("", N);
     }
 
