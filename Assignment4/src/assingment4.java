@@ -12,8 +12,11 @@ public class assingment4 {
 	public static void main(String [] args) throws IOException{
 	//public void main()throws IOException{
 		BufferedReader br = null;
+		BufferedReader brPassTwo = null;
+
 		String pathName = "graph.txt";
 		int distance = 1002;
+		//int distance = 30;
 		int number = 30;
 		
 		int max = 0;
@@ -24,34 +27,61 @@ public class assingment4 {
 		//read in input
 		try {
 			br = new BufferedReader(new FileReader(pathName));
-			String input = br.readLine();
-			StringTokenizer st1 = new StringTokenizer(input,"x");
-	 		for(int i=0; st1.hasMoreElements();i++){
-	 			String s1 = st1.nextToken();
-	 			if (i==0){
-	 				String s = new String(s1);
-	 				StringTokenizer st2 = new StringTokenizer(s,",");
-		 			for(int k = 0; st2.hasMoreElements();k++){
-		 				String sub = st2.nextToken();
-		 				g.addVertex(k);}
-		 		}
-		 		StringTokenizer st3 = new StringTokenizer(s1,",");
-		 		int vertexBigEdge = 0;
-	 			for(int j = 0; st3.hasMoreElements();j++){
-	 				
-	 				int weight = Integer.parseInt(st3.nextToken());
-	 				if(weight!=0){
-	 					DefaultWeightedEdge e = g.addEdge(i, j);
-	 					if(e!=null){
-	 						g.setEdgeWeight(e, weight);}
-	 					if(weight > distance){
-	 						vertexBigEdge++;}
-	 				}//end if weight !=0
-	 				
-	 			
-	 			}//end inner for
- 			
-	 		}//end outer for
+			String input;
+			int vertex = 0;
+			while ((input = br.readLine()) != null){				
+					g.addVertex(vertex);
+					vertex++;			
+			}
+			
+			brPassTwo = new BufferedReader(new FileReader(pathName));
+
+			vertex = 0;
+			for(input = brPassTwo.readLine(); input != null;){
+				input.trim();
+				String splitOnSpace [] = input.split("\\s");
+				
+				for(int i = 1; i < splitOnSpace.length / 2; i++){
+					if(Integer.parseInt(splitOnSpace[i+1]) !=0){
+						DefaultWeightedEdge e = g.addEdge(vertex, 
+								Integer.parseInt(splitOnSpace[i]));
+						if(e!=null){
+	 						g.setEdgeWeight(e, Integer.parseInt(splitOnSpace[i+1]));
+	 					}
+					}
+				}
+				vertex++;
+			}
+			
+//			StringTokenizer st1 = new StringTokenizer(input,"x");
+//	 		for(int i=0; st1.hasMoreElements();i++){
+//	 			String s1 = st1.nextToken();
+//	 			if (i==0){
+//	 				String s = new String(s1);
+//	 				StringTokenizer st2 = new StringTokenizer(s,",");
+//		 			for(int k = 0; st2.hasMoreElements();k++){
+//		 				String sub = st2.nextToken();
+//		 				g.addVertex(k);
+//		 		}
+//		 		}
+//		 		StringTokenizer st3 = new StringTokenizer(s1,",");
+//		 		int vertexBigEdge = 0;
+//	 			for(int j = 0; st3.hasMoreElements();j++){
+//	 				
+//	 				int weight = Integer.parseInt(st3.nextToken());
+//	 				if(weight!=0){
+//	 					DefaultWeightedEdge e = g.addEdge(i, j);
+//	 					if(e!=null){
+//	 						g.setEdgeWeight(e, weight);}
+//	 					if(weight > distance){
+//	 						vertexBigEdge++;
+//	 						}
+//	 				}//end if weight !=0
+//	 				
+//	 			
+//	 			}//end inner for
+// 			
+//	 		}//end outer for
 	 		
 	 	} //End try
 		catch (IOException e) {
