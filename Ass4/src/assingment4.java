@@ -103,7 +103,10 @@ public class assingment4 {
 		finally {
 			try {
 				if (br != null)
-					br.close();} 
+					br.close();
+				if (brPassTwo != null)
+					brPassTwo.close();
+			} 
 			catch (IOException ex) {
 				ex.printStackTrace();}
 		}//End finally
