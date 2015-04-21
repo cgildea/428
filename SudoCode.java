@@ -44,6 +44,4 @@ List<Boolean> markedVertex= new ArrayList<Boolean>();
                     }
                 }
             }
-if(ture){
-
         }
