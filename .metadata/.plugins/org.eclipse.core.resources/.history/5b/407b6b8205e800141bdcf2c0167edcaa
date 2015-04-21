@@ -1,0 +1,141 @@
+import java.io.*;
+import java.util.*;
+
+
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+
+public class homework4 {
+	public static void main(String [] args) throws IOException{
+	//public void main()throws IOException{
+		BufferedReader br = null;
+		BufferedReader brPassTwo = null;
+
+		String pathName = "graph.txt";
+		int distance = 30;
+
+		SimpleGraph<Integer, DefaultWeightedEdge> g = new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		Set<Integer> minCover = new TreeSet<Integer>();
+		
+		//read in input
+		try {
+			br = new BufferedReader(new FileReader(pathName));
+			String input;
+			int vertex = 0;
+			while ((input = br.readLine()) != null){				
+					g.addVertex(vertex);
+					vertex++;			
+			}		
+			brPassTwo = new BufferedReader(new FileReader(pathName));
+			vertex = 0;
+			while ((input = brPassTwo.readLine()) != null){
+				input.trim();
+				String splitOnSpace [] = input.split("\\s");
+				int weight = 2;
+				int edge = 1;
+				for(int i = 0; i < splitOnSpace.length / 2; i++){
+					if(Integer.parseInt(splitOnSpace[edge]) !=0){
+						DefaultWeightedEdge e = g.addEdge(vertex, 
+								Integer.parseInt(splitOnSpace[edge]));
+						if(e!=null){
+	 						g.setEdgeWeight(e, Integer.parseInt(splitOnSpace[weight]));
+	 					}
+					}
+					weight += 2;
+					edge += 2;
+				}
+				vertex++;
+			}		
+			Set<Integer> vertexList = g.vertexSet();
+			System.out.println("Total Vertecies: " + vertexList.toArray().length);
+
+			
+			List<Boolean> markedVertex= new ArrayList<Boolean>();
+	        List<Integer> vertexList1= new ArrayList<Integer>();
+	        Set<Integer> vertexSet = g.vertexSet();
+	        for(int i =0; i < vertexSet.size(); i++){
+	            Boolean e=false;
+	            markedVertex.add(i,e);
+	            vertexList1.add(i);
+	        }
+	        int loopCount = vertexSet.size();
+	        for(int z = 0; z < loopCount; z++){
+	            int numEdge = 0;
+	            int vertex1 = -1;
+	            for(int i = 0; i < vertexSet.size(); i++){
+	                if(!markedVertex.get(i)){
+	                    Set<DefaultWeightedEdge> edge = g.edgesOf(i);
+	                    Iterator<DefaultWeightedEdge> edgeItr = edge.iterator();
+	                    int count = 0;
+	                    while(edgeItr.hasNext()){
+	                        DefaultWeightedEdge e = edgeItr.next();
+	                        double edgeWeight = g.getEdgeWeight(e);
+	                        if (edgeWeight <= distance){
+	                            count++;}
+	                    }
+	                    if (count >numEdge){
+	                        numEdge = count;
+	                        vertex1 = i;}
+	                }
+	            }
+	            if(vertex1!=-1){
+	                markedVertex.set(vertex1,true);
+	                minCover.add(vertex1);
+	                Set<DefaultWeightedEdge> edge = g.edgesOf(vertex1);
+	                Iterator<DefaultWeightedEdge> edgeItr = edge.iterator();
+	                loopCount--;
+	                while(edgeItr.hasNext()){
+	                    DefaultWeightedEdge e = edgeItr.next();
+	                    double edgeWeight = g.getEdgeWeight(e);
+	                    if (edgeWeight <= distance){
+	                        int source = g.getEdgeSource(e);
+	                        int target = g.getEdgeTarget(e);
+	                        markedVertex.set(source, true);
+	                        markedVertex.set(target, true);
+	                        loopCount--;
+	                    }
+	                }
+	            }
+	        }
+	 		
+	 	} //End try
+		finally {
+			try {
+				if (br != null)
+					br.close();
+				if (brPassTwo != null)
+					brPassTwo.close();
+			} 
+			catch (IOException ex) {
+				ex.printStackTrace();}
+		}//End finally
+		System.out.println("done create graph");
+		
+		StringBuilder s = new StringBuilder();
+		System.out.println("# station: " + minCover.size());
+		Iterator<Integer> itr = minCover.iterator();
+		while(itr.hasNext()){
+			Integer i = itr.next();
+			s.append(i + "x");
+		}
+		
+		
+		File file = new File("Assignment4.txt");
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();}
+
+		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(s.toString());
+		bw.close();
+
+			
+
+		
+		
+	}//end main
+	
+}
